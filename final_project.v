@@ -123,7 +123,7 @@ module delay(
     );
     // 20'd833332
     //localparam delay_total = 20'd833332;
-    localparam delay_total = 20'd332;
+    localparam delay_total = 20'd32;
 
     reg [19:0] delay_counter;
     always @(posedge clk) begin
