@@ -12,4 +12,4 @@ force {resetn} 0
 run 4
 
 force {resetn} 1
-run 3000
+run 10000
