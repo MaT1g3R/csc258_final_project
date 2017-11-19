@@ -84,19 +84,33 @@ module draw(
     output reg [6:0] y_out,
     );
     reg [4:0] x_counter;
-
-    @always @(posedge clk) begin
+    reg [7:0] tmp_y;
+    always @(posedge clk) begin
         if (!resetn) begin
             y_out <= 7'b0000000;
+            tmp_y <= 8'b00000000;
             x_out <= x_in;
+            x_counter <= 5'd0;
         end
-        else begin
-            y_out <= y_in - 120;
+        else if (go) begin
+            tmp_y <= y_in - 8'd120;
+            y_out <= tmp_y[6:0];
+            if (x_counter < 30) begin
+                x_counter <= x_counter + 1;
+            end
+            else begin
+                x_counter <= 5'd0;
+            end
+            x_out <= x_in + x_counter;
+        end
+        else if (!go) begin
+            y_out <= 7'b0000000;
+            tmp_y <= 8'b00000000;
+            x_out <= x_in;
+            x_counter <= 5'd0;
         end
     end
 endmodule
-
-
 
 
 module move_fsm();
