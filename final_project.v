@@ -81,7 +81,7 @@ module draw(
     input [7:0] x_in,
     input [7:0] y_in,
     output reg [7:0] x_out,
-    output reg [6:0] y_out,
+    output reg [6:0] y_out
     );
     reg [4:0] x_counter;
     reg [7:0] tmp_y;
