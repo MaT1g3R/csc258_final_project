@@ -4,12 +4,12 @@ vsim y_counter
 log {/*}
 add wave {/*}
 
-force {clk} 0 0, 1 2 -r 4
-force {go} 0 0, 1 2 -r 16
+force {clk} 1 0, 0 2 -r 4
+force {go} 1 0, 0 2 -r 8
 
 force {y_in} 00001000
 force {resetn} 0
 run 4
 
 force {resetn} 1
-run 1000
+run 10000
