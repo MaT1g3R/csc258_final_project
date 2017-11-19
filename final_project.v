@@ -158,7 +158,7 @@ module y_counter(
             y_out <= y_in;
         end
         else if (go) begin
-            if (y_out >= 8d'240) begin
+            if (y_out >= 8'd240) begin
                 y_out <= y_in;
             end
             else begin
