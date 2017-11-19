@@ -81,7 +81,7 @@ module draw(
     input [7:0] x_in,
     input [7:0] y_in,
     output reg [7:0] x_out,
-    output reg [6:0] y_out,
+    output reg [6:0] y_out
     );
     reg [4:0] x_counter;
     reg [7:0] tmp_y;
@@ -116,14 +116,73 @@ endmodule
 module move_fsm();
 endmodule
 
-module delay();
+module delay(
+    input clk,
+    input resetn,
+    output reg go
+    );
+    // 20'd833332
+    //localparam delay_total = 20'd833332;
+    localparam delay_total = 20'd32;
+
+    reg [19:0] delay_counter;
+    always @(posedge clk) begin
+        if (!resetn) begin
+            go <= 0;
+            delay_counter <= delay_total;
+        end
+        else begin
+            if (delay_counter == 0) begin
+                go <= 1;
+                delay_counter <= delay_total;
+            end
+            else begin
+                delay_counter <= delay_counter - 1;
+                go <= 0;
+            end
+        end
+    end
 endmodule
 
-module y_counter();
+
+module y_counter(
+    input clk,
+    input go,
+    input resetn,
+    input [7:0] y_in,
+    output reg [7:0] y_out
+    );
+
+    always @(posedge clk) begin
+        if (!resetn) begin
+            y_out <= y_in;
+        end
+        else if (go) begin
+            if (y_out >= 8'd240) begin
+                y_out <= y_in;
+            end
+            else begin
+                y_out <= y_out + 1;
+            end
+        end
+    end
 endmodule
+
 
 module rng();
 endmodule
 
-module write_enable();
+module write_enable(
+    input fake_wren,
+    input [7:0] y_in,
+    output reg writeEn
+    );
+    always @(*) begin
+        if (y_in <= 8'd210 && y_in >= 8'd90) begin
+            writeEn <= fake_wren;
+        end
+        else begin
+            writeEn <= 0;
+        end
+    end
 endmodule
