@@ -13,6 +13,7 @@ force {y_in} 10000010
 run 4
 
 force {go} 1
+force {resetn} 1
 run 120
 
 force {go} 0
