@@ -145,11 +145,44 @@ module delay(
 endmodule
 
 
-module y_counter();
+module y_counter(
+    input clk,
+    input go,
+    input resetn,
+    input [7:0] y_in,
+    output reg [7:0] y_out
+    );
+
+    always @(posedge clk) begin
+        if (!resetn) begin
+            y_out <= y_in;
+        end
+        else if (go) begin
+            if (y_out >= 8d'240) begin
+                y_out <= y_in;
+            end
+            else begin
+                y_out <= y_out + 1;
+            end
+        end
+    end
 endmodule
+
 
 module rng();
 endmodule
 
-module write_enable();
+module write_enable(
+    input fake_wren,
+    input [7:0] y_in,
+    output reg writeEn
+    );
+    always @(*) begin
+        if (y_in <= 8'd210 && y_in >= 8'd90) begin
+            writeEn <= fake_wren;
+        end
+        else begin
+            writeEn <= 0;
+        end
+    end
 endmodule
