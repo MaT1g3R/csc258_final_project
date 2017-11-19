@@ -5,7 +5,7 @@ log {/*}
 add wave {/*}
 
 force {clk} 0 0, 1 2 -r 4
-force {go} 0 0, 1 2 -r 16
+force {go} 1 0, 0 2 -r 16
 
 force {y_in} 00001000
 force {resetn} 0
