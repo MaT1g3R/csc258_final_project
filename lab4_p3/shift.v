@@ -1,21 +1,42 @@
-module shift(LEDR, SW, KEY);
-    input [9:0] SW;
-    input [3:0] KEY;
-    output [9:0] LEDR;
+module rng(
+    input clock,
+    input reset_n,
+    input [9:0] seed,
+    input load_n
+    output out
+);
 
-    wire reset_n, clock, shift_right, load_n;
-    assign reset_n = SW[9];
-    assign clock = KEY[0];
-    assign shift_right = KEY[2];
-    assign load_n = KEY[1];
-    assign asr = KEY[3];
+wire shift_right;
+assign shift_right = 1'b1;
+#Always want to shift when clk is pulsed.
 
-    wire [7:0] shift_out;
-    assign LEDR[7:0] = shift_out;
+wire newBit;
+assign newBit = shift_out[0] ^ shift_out[3];
+#Taps on the 10th and 7th regesters will lead to the longest output cycle.
+
+    shift_bit shift9(
+        .load_val(seed[9]),
+        .in(newBit),
+        .shift_right(shift_right),
+        .load_n(load_n),
+        .clock(clock),
+        .reset_n(reset_n),
+        .out(shift_out[9])
+    );
+
+    shift_bit shift8(
+        .load_val(seed[6]),
+        .in(shift_out[9]),
+        .shift_right(shift_right),
+        .load_n(load_n),
+        .clock(clock),
+        .reset_n(reset_n),
+        .out(shift_out[8])
+    );
 
     shift_bit shift7(
-        .load_val(SW[7]),
-        .in(asr),
+        .load_val(seed[7]),
+        .in(shift_out[8]),
         .shift_right(shift_right),
         .load_n(load_n),
         .clock(clock),
@@ -24,7 +45,7 @@ module shift(LEDR, SW, KEY);
     );
 
     shift_bit shift6(
-        .load_val(SW[6]),
+        .load_val(seed[6]),
         .in(shift_out[7]),
         .shift_right(shift_right),
         .load_n(load_n),
@@ -34,7 +55,7 @@ module shift(LEDR, SW, KEY);
     );
 
     shift_bit shift5(
-        .load_val(SW[5]),
+        .load_val(seed[5]),
         .in(shift_out[6]),
         .shift_right(shift_right),
         .load_n(load_n),
@@ -44,7 +65,7 @@ module shift(LEDR, SW, KEY);
     );
 
     shift_bit shift4(
-        .load_val(SW[4]),
+        .load_val(seed[4]),
         .in(shift_out[5]),
         .shift_right(shift_right),
         .load_n(load_n),
@@ -54,7 +75,7 @@ module shift(LEDR, SW, KEY);
     );
 
     shift_bit shift3(
-        .load_val(SW[3]),
+        .load_val(seed[3]),
         .in(shift_out[4]),
         .shift_right(shift_right),
         .load_n(load_n),
@@ -64,7 +85,7 @@ module shift(LEDR, SW, KEY);
     );
 
     shift_bit shift2(
-        .load_val(SW[2]),
+        .load_val(seed[2]),
         .in(shift_out[3]),
         .shift_right(shift_right),
         .load_n(load_n),
@@ -74,7 +95,7 @@ module shift(LEDR, SW, KEY);
     );
 
     shift_bit shift1(
-        .load_val(SW[1]),
+        .load_val(seed[1]),
         .in(shift_out[2]),
         .shift_right(shift_right),
         .load_n(load_n),
@@ -84,7 +105,7 @@ module shift(LEDR, SW, KEY);
     );
 
     shift_bit shift0(
-        .load_val(SW[0]),
+        .load_val(seed[0]),
         .in(shift_out[1]),
         .shift_right(shift_right),
         .load_n(load_n),
@@ -157,5 +178,3 @@ module shift_bit(load_val, in, shift_right, load_n, clock, reset_n, out);
         .d(mux1_out)
     );
 endmodule
-
-// vim: ts=4:sw=4:et
