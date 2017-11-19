@@ -116,8 +116,34 @@ endmodule
 module move_fsm();
 endmodule
 
-module delay();
+module delay(
+    input clk,
+    input resetn,
+    output reg go
+    );
+    // 20'd833332
+    //localparam delay_total = 20'd833332;
+    localparam delay_total = 20'd332;
+
+    reg [19:0] delay_counter;
+    always @(posedge clk) begin
+        if (!resetn) begin
+            go <= 0;
+            delay_counter <= delay_total;
+        end
+        else begin
+            if (delay_counter == 0) begin
+                go <= 1;
+                delay_counter <= delay_total;
+            end
+            else begin
+                delay_counter <= delay_counter - 1;
+                go <= 0;
+            end
+        end
+    end
 endmodule
+
 
 module y_counter();
 endmodule
