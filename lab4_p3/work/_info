@@ -7,39 +7,39 @@ z2
 !i10e 25
 !i10f 100
 cModel Technology
-Z0 d/h/u14/c6/01/mapeijun/Projects/HDL/CSC258/lab4/part3
+d/h/u14/c6/01/mapeijun/Projects/HDL/CSC258/lab4/part3
 vflipflop
-Z1 !s110 1507172975
+Z0 !s110 1511120916
 !i10b 1
-!s100 ][52e`o9__[Q9aYJfaD]62
-IjQ`iGdeHTbd==:ZXUl^;C3
-Z2 VDg1SIo80bB@j0V0VzS_@n1
-R0
-Z3 w1507172944
+!s100 TDaNNY2Jado5;n@U16eln3
+I:]l<foi8[DTX2z9Z1NQdm2
+Z1 VDg1SIo80bB@j0V0VzS_@n1
+Z2 dC:/Users/Oliver/Desktop/Everything/!School Work/SecondYear/CSC258/csc258_final_project/lab4_p3
+Z3 w1511120915
 Z4 8shift.v
 Z5 Fshift.v
-L0 115
+L0 137
 Z6 OV;L;10.5b;63
 r1
 !s85 0
 31
-Z7 !s108 1507172975.000000
+Z7 !s108 1511120916.000000
 Z8 !s107 shift.v|
 Z9 !s90 -reportprogress|300|-timescale|1ns/1ns|shift.v|
 !i113 1
 Z10 o-timescale 1ns/1ns
 Z11 tCvgOpt 0
 vmux2to1
-R1
-!i10b 1
-!s100 47ao]eGB_Dd42U;U9aoeO0
-Ic`iJf7T_@Zg<:zIE:ADn^3
-R2
 R0
+!i10b 1
+!s100 gzA8;X:05<dVX<lQ^QFno0
+Imk0m;M;8>Wk_QiN[;eY4=3
+R1
+R2
 R3
 R4
 R5
-L0 99
+L0 121
 R6
 r1
 !s85 0
@@ -51,12 +51,12 @@ R9
 R10
 R11
 vshift
-R1
-!i10b 1
-!s100 ;J;0UlRAhm<MV8i8UK9P01
-I5eUUJ;Vm[L3I3G3;nN<Ho2
-R2
 R0
+!i10b 1
+!s100 kThDm46oZzE;QE;OZaV^R0
+IY]RVZbzT8UUL4LFFIloE`3
+R1
+R2
 R3
 R4
 R5
@@ -72,16 +72,16 @@ R9
 R10
 R11
 vshift_bit
-R1
-!i10b 1
-!s100 LNcP1aQe>;NEW=Jh@85d73
-Ik;`M>@N@^fk53SiibLOGC3
-R2
 R0
+!i10b 1
+!s100 za[oDdXXHDMgYjVlkf<2f1
+ICY56g6`UnVRK0GUUe_NG]1
+R1
+R2
 R3
 R4
 R5
-L0 132
+L0 154
 R6
 r1
 !s85 0
