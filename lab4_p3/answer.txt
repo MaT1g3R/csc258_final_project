@@ -1,0 +1,3 @@
+The output would stay the same as the preivous output, because the preivous 
+output loops back into the second multiplexer, "in" is not chosen at the first
+multiplexer, and load_n chooses the preivous output.

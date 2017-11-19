@@ -1,0 +1,22 @@
+do wave.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 23:09:35 on Oct 04,2017
+# vlog -reportprogress 300 -timescale 1ns/1ns shift.v 
+# -- Compiling module shift
+# -- Compiling module mux2to1
+# -- Compiling module flipflop
+# -- Compiling module shift_bit
+# 
+# Top level modules:
+# 	shift
+# End time: 23:09:35 on Oct 04,2017, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vsim shift 
+# Start time: 23:09:36 on Oct 04,2017
+# Loading work.shift
+# Loading work.shift_bit
+# Loading work.mux2to1
+# Loading work.flipflop
+# End time: 23:12:01 on Oct 04,2017, Elapsed time: 0:02:25
+# Errors: 0, Warnings: 0

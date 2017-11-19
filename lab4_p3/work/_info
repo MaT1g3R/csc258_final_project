@@ -1,0 +1,94 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 d/h/u14/c6/01/mapeijun/Projects/HDL/CSC258/lab4/part3
+vflipflop
+Z1 !s110 1507172975
+!i10b 1
+!s100 ][52e`o9__[Q9aYJfaD]62
+IjQ`iGdeHTbd==:ZXUl^;C3
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+R0
+Z3 w1507172944
+Z4 8shift.v
+Z5 Fshift.v
+L0 115
+Z6 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z7 !s108 1507172975.000000
+Z8 !s107 shift.v|
+Z9 !s90 -reportprogress|300|-timescale|1ns/1ns|shift.v|
+!i113 1
+Z10 o-timescale 1ns/1ns
+Z11 tCvgOpt 0
+vmux2to1
+R1
+!i10b 1
+!s100 47ao]eGB_Dd42U;U9aoeO0
+Ic`iJf7T_@Zg<:zIE:ADn^3
+R2
+R0
+R3
+R4
+R5
+L0 99
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+R11
+vshift
+R1
+!i10b 1
+!s100 ;J;0UlRAhm<MV8i8UK9P01
+I5eUUJ;Vm[L3I3G3;nN<Ho2
+R2
+R0
+R3
+R4
+R5
+L0 1
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+R11
+vshift_bit
+R1
+!i10b 1
+!s100 LNcP1aQe>;NEW=Jh@85d73
+Ik;`M>@N@^fk53SiibLOGC3
+R2
+R0
+R3
+R4
+R5
+L0 132
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+R11
