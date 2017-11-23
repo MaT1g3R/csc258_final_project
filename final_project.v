@@ -112,10 +112,6 @@ module draw(
     end
 endmodule
 
-
-module move_fsm();
-endmodule
-
 module delay(
     input clk,
     input resetn,
@@ -186,3 +182,97 @@ module write_enable(
         end
     end
 endmodule
+
+    module move_fsm(
+        input clk,
+        input resetn,
+        input go,
+        input [7:0] y_in,
+        input [2:0] colour_in,
+
+        output reg  [7:0] y_out,
+        output reg  [2:0] colour_out,
+        output reg  wren, need_rng
+        );
+
+        reg [2:0] current_state, next_state; 
+        reg [4:0] counter;
+        
+        localparam  WaitForGo        = 3'd0,
+                    DrawNewLine      = 3'd1,
+                    Wait30One        = 3'd2,
+                    DeleteLine       = 3'd3,
+                    Wait30Two        = 3'd4;
+
+        
+        // Next state logic aka our state table
+        always@(*)
+        begin: state_table 
+                case (current_state)
+                    WaitForGo: next_state = DrawNewLine;
+                    DrawNewLine: next_state = Wait30One;
+                    Wait30One: if (counter == 5'b11110) begin
+                        next_state = DeleteLine;
+                    end else begin 
+                        next_state = Wait30One;
+                    end
+                    DeleteLine: next_state = Wait30Two;
+                    Wait30Two: if (counter == 5'b11110) begin
+                        next_state = WaitForGo;
+                    end else begin 
+                        next_state = Wait30Two;
+                    end
+                default:     next_state = WaitForGo;
+            endcase
+        end // state_table
+    
+
+        // Output logic aka all of our datapath control signals
+        always @(*)
+        begin: enable_signals
+            // By default make all our signals 0
+            wren = 1'b0;
+            need_rng = 1'b0;
+            y_out = 8'b00000000;
+            colour_out = 3'b000;
+
+            case (current_state)
+                WaitForGo: begin
+                     counter = 0;
+                    end
+                DrawNewLine: begin
+                    colour_out = 3'b100;
+                    wren = 1;
+                    y_out = y_in + 29;
+                end
+                Wait30One: begin
+                    colour_out = 3'b100;
+                    wren = 1;
+                    y_out = y_in + 29;
+                    counter = counter + 30;
+                end
+                DeleteLine: begin
+                    colour_out = 3'b000;
+                    wren = 1;
+                    y_out = y_in - 1;
+                    counter = 0;
+                end
+                Wait30Two: begin 
+                    colour_out = 3'b000;
+                    wren = 1;
+                    y_out = y_in - 1;
+                    counter = counter + 30;
+                end
+            // default:    // don't need default since we already made sure all of our outputs were assigned a value at the start of the always block
+            endcase
+        end // enable_signals
+    
+        // current_state registers
+        always@(posedge clk)
+        begin: state_FFs
+            if(!resetn)
+                current_state <= WaitForGo;
+            else
+                current_state <= next_state;
+        end // state_FFS
+    endmodule
