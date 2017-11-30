@@ -43,11 +43,16 @@ module final_project
    assign clk = CLOCK_50;
 
     // Create the colour, x, y and writeEn wires that are inputs to the controller.
-    wire [2:0] colour;
-    wire [7:0] x;
-    wire [6:0] y;
-    wire writeEn;
-    wire go;
+    reg [2:0] colour;
+    reg [7:0] x;
+    reg [6:0] y;
+    reg writeEn;
+
+    wire go[3:0]; 
+    wire [7:0] x0, x1, x2, x3;
+    wire [6:0] y0, y1, y2, y3;
+    wire [2:0] c0, c1, c2, c3;
+    wire [3:0] wrenAll;
 
     delay d0(
         .clk(clk),
@@ -59,15 +64,79 @@ module final_project
      main m0(
         .clk(clk),
         .resetn(resetn),
-        .go(go),
+        .go(go[0]),
         .colour_in(SW[9:7]),
         .x_in(8'd20),
-        .writeEnable(writeEn),
-        .x_out(x),
-        .y_out(y),
-        .colour_out(colour)
+        .writeEnable(wrenAll[0]),
+        .x_out(x0),
+        .y_out(y0),
+        .colour_out(c0)
      );
 
+     main m1(
+        .clk(clk),
+        .resetn(resetn),
+        .go(go[1]),
+        .colour_in(SW[9:7]),
+        .x_in(8'd20),
+        .writeEnable(wrenAll[1]),
+        .x_out(x1),
+        .y_out(y1),
+        .colour_out(c1)
+     );
+
+     main m2(
+        .clk(clk),
+        .resetn(resetn),
+        .go(go[2]),
+        .colour_in(SW[9:7]),
+        .x_in(8'd20),
+        .writeEnable(wrenAll[2]),
+        .x_out(x2),
+        .y_out(y2),
+        .colour_out(c2)
+     );
+
+     main m3(
+        .clk(clk),
+        .resetn(resetn),
+        .go(go[3]),
+        .colour_in(SW[9:7]),
+        .x_in(8'd20),
+        .writeEnable(wrenAll[3]),
+        .x_out(x3),
+        .y_out(y3),
+        .colour_out(c3)
+     );
+    
+    always @(*) begin
+        if (go[0]) begin
+            x = x0;
+            y = y0;
+            writeEn = wrenAll[0];
+            colour = c0;
+        end else if (go[1]) begin
+            x = x1;
+            y = y1;
+            writeEn = wrenAll[1];
+            colour = c1;
+        end else if (g0[2]) begin
+            x = x2;
+            y = y2;
+            writeEn = wrenAll[2];
+            colour = c2;
+        end else if (go[3]) begin
+            x = x3;
+            y = y3;
+            writeEn = wrenAll[3];
+            colour = c3;
+        end else begin
+            x = 8'd0;
+            y = 7'd0;
+            writeEn = 1'b0;
+            colour = 3'd0;
+        end
+    end
     // Create an Instance of a VGA controller - there can be only one!
     // Define the number of colours as well as the initial background
     // image file (.MIF) for the controller.
@@ -195,8 +264,8 @@ endmodule
 module delay(
     input clk,
     input resetn,
-     input [19:0] val;
-    output reg go
+    input [19:0] val;
+    output reg [3:0] go
     );
     // 20'd833332
     localparam delay_total = 20'd833332;
@@ -205,17 +274,28 @@ module delay(
     reg [19:0] delay_counter;
     always @(posedge clk) begin
         if (!resetn) begin
-            go <= 0;
+            go <= 4'd0;
             delay_counter <= delay_total;
         end
         else begin
             if (delay_counter == 0) begin
                 delay_counter <= delay_total;
+                go <= 4'b0001;
             end
             else begin
                 delay_counter <= delay_counter - 1;
-            end
-                
+                if (delay_counter == delay_total) begin
+                    go <= 4'b0001;
+                end else if ((delay_counter == delay_total - 60) || (delay_counter == delay_total - 61)) begin
+                    go <=4'b0010;
+                end else if ((delay_counter == delaay_total - 120) || (delay_counter == delaay_total - 121)) begin
+                    go <= 4'b0100;
+                end else if ((delay_counter == delaay_total - 180) || (delay_counter == delaay_total - 181)) begin
+                    go <= 4'b1000;
+                end else begin
+                    go <= 4'b0000;
+                end
+            end 
         end
     end
 endmodule
