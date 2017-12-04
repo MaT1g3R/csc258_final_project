@@ -47,25 +47,25 @@ module final_project
     reg [7:0] x;
     reg [6:0] y;
     reg writeEn;
-	 
-	 wire [6:0] random_y;
+     
+    wire [6:0] random_y;
     wire [3:0] go;
     wire [7:0] x0, x1, x2, x3;
     wire [6:0] y0, y1, y2, y3;
     wire [2:0] c0, c1, c2, c3;
     wire [3:0] wrenAll;
-	 wire [3:0] need_rng_all;
-	 
-	 
-	 wire need_rng_final;
-	 assign need_rng_final = (need_rng_all > 0);
-    rng random(
+    wire [3:0] need_rng_all;
+     
+     
+     wire need_rng_final;
+     assign need_rng_final = (need_rng_all > 0);
+     rng random(
          .clock(clk),
          .reset_n(resetn),
-			.need_rng(need_rng_final),
+         .need_rng(need_rng_final),
          .out(random_y)
     );
-	 
+     
     delay d0(
         .clk(clk),
         .resetn(resetn),
@@ -78,12 +78,12 @@ module final_project
         .go(go[0]),
         .colour_in(SW[9:7]),
         .x_in(8'd19),
-		  .random_y(random_y),
+        .random_y(random_y),
         .writeEnable(wrenAll[0]),
         .x_out(x0),
         .y_out(y0),
         .colour_out(c0),
-		  .need_rng(need_rng_all[0])
+          .need_rng(need_rng_all[0])
      );
 
      main m1(
@@ -92,12 +92,12 @@ module final_project
         .go(go[1]),
         .colour_in(SW[9:7]),
         .x_in(8'd50),
-		  .random_y(random_y),
+        .random_y(random_y),
         .writeEnable(wrenAll[1]),
         .x_out(x1),
         .y_out(y1),
         .colour_out(c1),
-		  .need_rng(need_rng_all[1])
+        .need_rng(need_rng_all[1])
      );
 
      main m2(
@@ -106,12 +106,12 @@ module final_project
         .go(go[2]),
         .colour_in(SW[9:7]),
         .x_in(8'd80),
-		  .random_y(random_y),
+        .random_y(random_y),
         .writeEnable(wrenAll[2]),
         .x_out(x2),
         .y_out(y2),
         .colour_out(c2),
-		  .need_rng(need_rng_all[2])
+        .need_rng(need_rng_all[2])
      );
 
      main m3(
@@ -120,36 +120,36 @@ module final_project
         .go(go[3]),
         .colour_in(SW[9:7]),
         .x_in(8'd110),
-		  .random_y(random_y),
+        .random_y(random_y),
         .writeEnable(wrenAll[3]),
         .x_out(x3),
         .y_out(y3),
         .colour_out(c3),
-		  .need_rng(need_rng_all[3])
+        .need_rng(need_rng_all[3])
      );
 
 
-	 always @(*) begin
+     always @(*) begin
         if (wrenAll[0]) begin
             x = x0;
             y = y0;
-				writeEn = wrenAll[0];
+            writeEn = wrenAll[0];
             colour = c0;
         end else if (wrenAll[1]) begin
             x = x1;
             y = y1;
             colour = c1;
-				writeEn = wrenAll[1];
+            writeEn = wrenAll[1];
         end else if (wrenAll[2]) begin
             x = x2;
             y = y2;
             colour = c2;
-				writeEn = wrenAll[2];
+            writeEn = wrenAll[2];
         end else if (wrenAll[3]) begin
             x = x3;
             y = y3;
             colour = c3;
-				writeEn = wrenAll[3];
+            writeEn = wrenAll[3];
         end else begin
             x = 8'd0;
             y = 7'd0;
@@ -167,7 +167,7 @@ module final_project
 //		  writeEn = wrenAll[2];
 //	 end
 //	 writeEn = wrenAll[0];
-	 
+     
     vga_adapter VGA(
             .resetn(resetn),
             .clock(clk),
@@ -196,12 +196,12 @@ module main(
         input clk, resetn, go,
         input [2:0] colour_in,
         input [7:0] x_in,
-		  input [6:0] random_y,
+        input [6:0] random_y,
         output writeEnable,
         output [7:0] x_out,
         output [6:0] y_out,
         output [2:0] colour_out,
-		  output need_rng
+        output need_rng
         );
         
         wire [7:0] y_reg;
@@ -271,12 +271,12 @@ module draw(
             x_counter <= 5'd0;
         end
         else if (go) begin
-				tmp_y <= y_in - 8'd135;
-				if (y_in > 8'd135) begin
-   				 y_out <= tmp_y[6:0];
-				end else begin
-					 y_out <= 0;
-				end
+                tmp_y <= y_in - 8'd135;
+                if (y_in > 8'd135) begin
+                    y_out <= tmp_y[6:0];
+                end else begin
+                     y_out <= 0;
+                end
 
             if (x_counter < 30) begin
                 x_counter <= x_counter + 1;
@@ -322,7 +322,7 @@ module delay(
 //				    tmp_go[1] <= 0;
 //				    tmp_go[2] <= 0;
 //				    tmp_go[3] <= 0;
-               go <= 4'b0001;
+                go <= 4'b0001;
             end
             else begin
                 delay_counter <= delay_counter - 1;
@@ -331,7 +331,7 @@ module delay(
 //						  tmp_go[1] <= 0;
 //						  tmp_go[2] <= 0;
 //						  tmp_go[3] <= 0;
-						  go <= 4'b0001;
+                    go <= 4'b0001;
                 end else if ((delay_counter == delay_total - 60) || (delay_counter == delay_total - 61)) begin
 //					 	  tmp_go[0] <= 0;
 //						  tmp_go[1] <= 1;
@@ -375,10 +375,10 @@ module y_counter(
     always @(posedge clk) begin
         if (!resetn) begin
             y_out <= y_in;
-                counter <= 0;
+            counter <= 0;
         end
         else if (go) begin
-                counter <= !counter;
+            counter <= !counter;
             if (y_out >= 8'd255) begin
                 y_out <= y_in;
             end
@@ -454,31 +454,31 @@ module move_fsm(
 
         case (current_state)
              WaitForGo: begin
-                    wren <= 0;
-                    counter <= 0;
-                  end
+                 wren <= 0;
+                 counter <= 0;
+             end
              DrawNewLine: begin
-                  colour_out <= colour_in;
-                  wren <= 0;
-                  y_out <= y_in + 29;
+                 colour_out <= colour_in;
+                 wren <= 0;
+                 y_out <= y_in + 29;
              end
              Wait30One: begin
-                  colour_out <= colour_in;
-                  wren <= 1;
-                  y_out <= y_in + 29;
-                  counter <= counter + 1;
+                 colour_out <= colour_in;
+                 wren <= 1;
+                 y_out <= y_in + 29;
+                 counter <= counter + 1;
              end
              DeleteLine: begin
-                  colour_out <= 3'b000;
-                  wren <= 0;
-                  y_out <= y_in - 1;
-                  counter <= 0;
+                 colour_out <= 3'b000;
+                 wren <= 0;
+                 y_out <= y_in - 1;
+                 counter <= 0;
              end
              Wait30Two: begin 
-                  colour_out <= 3'b000;
-                  wren <= 1;
-                  y_out <= y_in - 1;
-                  counter <= counter + 1;
+                 colour_out <= 3'b000;
+                 wren <= 1;
+                 y_out <= y_in - 1;
+                 counter <= counter + 1;
              end
         endcase
     end // enable_signals
@@ -495,30 +495,27 @@ endmodule
 
 
 module rng(
-	input clock,
-	input reset_n,
-	input need_rng,
-	output reg [6:0] out
+    input clock,
+    input reset_n,
+    input need_rng,
+    output reg [6:0] out
 );
 
-	reg [9:0] current_value;
-	reg temp;
-	
-	always @(posedge clock) begin 
-		if (!reset_n) begin
-			current_value <= 1;
-			temp <= 0;
-			out <= 0;
-		end else begin 
-			temp <= current_value[3] ^ current_value[0];
-			current_value <= current_value >> 1;
-			current_value[9] <= temp;
-			out <= current_value % 85;
-		end
-	end
-	
+    reg [9:0] current_value;
+    reg temp;
+    
+    always @(posedge clock) begin 
+        if (!reset_n) begin
+            current_value <= 1;
+            temp <= 0;
+            out <= 0;
+        end else begin 
+            temp <= current_value[3] ^ current_value[0];
+            current_value <= current_value >> 1;
+            current_value[9] <= temp;
+            out <= current_value % 85;
+        end
+    end
+    
 endmodule
-
-
-
 
