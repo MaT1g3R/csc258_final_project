@@ -11,7 +11,11 @@ module final_project
         KEY,
         SW,
 		  HEX0,
-		  scoreR,
+		  HEX1,
+		  HEX2,
+		  HEX3,
+		  HEX4,
+		  HEX5,
         // The ports below are for the VGA output.  Do not change.
         VGA_CLK,   						//	VGA Clock
         VGA_HS,							//	VGA H_SYNC
@@ -26,8 +30,7 @@ module final_project
     input			CLOCK_50;				//	50 MHz
     input   [9:0]   SW;
     input   [3:0]   KEY;
-    output  [9:0] scoreR;
-	 output  [6:0] HEX0;
+	 output  [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5;
 	  
 
     // Declare your inputs and outputs here
@@ -41,9 +44,9 @@ module final_project
     output	[9:0]	VGA_G;	 				//	VGA Green[9:0]
     output	[9:0]	VGA_B;   				//	VGA Blue[9:0]
 
-    wire resetn;
-//	 assign resetn = 0;
-    assign resetn = SW[0];
+    reg resetn = 0;
+	 reg start = 1;
+
 
     wire clk;
     assign clk = CLOCK_50;
@@ -53,8 +56,9 @@ module final_project
     reg [7:0] x;
     reg [6:0] y;
     reg writeEn;
-    reg [3:0] lives;
-	 reg [3:0] total_score;
+    reg [7:0] lives;
+	 reg [7:0] total_score;
+	 reg [7:0] high_score;
 	 wire score0, score1, score2, score3;
 
 	 
@@ -77,10 +81,35 @@ module final_project
     );
 	 
 	 hex_decoder hex_d0(
-	     .hex_digit(total_score), 
+	     .hex_digit(total_score[3:0]), 
 		  .segments(HEX0)
 	 );
-
+	
+	hex_decoder hex_d1(
+	     .hex_digit(total_score[7:4]), 
+		  .segments(HEX1)
+	 );
+	 
+	 hex_decoder hex_d2(
+	     .hex_digit(lives[3:0]), 
+		  .segments(HEX2)
+	 );
+	 
+	 hex_decoder hex_d3(
+	     .hex_digit(lives[7:4]), 
+		  .segments(HEX3)
+	 );
+	 
+	 hex_decoder hex_d4(
+	     .hex_digit(high_score[3:0]), 
+		  .segments(HEX4)
+	 );
+	 
+	 hex_decoder hex_d5(
+	     .hex_digit(high_score[7:4]), 
+		  .segments(HEX5)
+	 );
+	 
     delay d0(
         .clk(clk),
         .resetn(resetn),
@@ -103,78 +132,144 @@ module final_project
 		  .kill(kill0),
 		  .score(score0)
      );
-//
-//     main m1(
-//        .clk(clk),
-//        .resetn(resetn),
-//        .go(go[1]),
-//        .colour_in(SW[9:7]),
-//        .x_in(8'd50),
-//        .random_y(random_y),
-//        .writeEnable(wrenAll[1]),
-//        .x_out(x1),
-//        .y_out(y1),
-//        .colour_out(c1),
-//        .need_rng(need_rng_all[1]),
-//		  .key(!KEY[2]),
-//	     .kill(kill1)
-//     );
-//
-//     main m2(
-//        .clk(clk),
-//        .resetn(resetn),
-//        .go(go[2]),
-//        .colour_in(SW[9:7]),
-//        .x_in(8'd80),
-//        .random_y(random_y),
-//        .writeEnable(wrenAll[2]),
-//        .x_out(x2),
-//        .y_out(y2),
-//        .colour_out(c2),
-//        .need_rng(need_rng_all[2]),
-//		  .key(!KEY[1]),
-//		  .kill(kill2)
-//		);
-//
-//     main m3(
-//        .clk(clk),
-//        .resetn(resetn),
-//        .go(go[3]),
-//        .colour_in(SW[9:7]),
-//        .x_in(8'd110),
-//        .random_y(random_y),
-//        .writeEnable(wrenAll[3]),
-//        .x_out(x3),
-//        .y_out(y3),
-//        .colour_out(c3),
-//        .need_rng(need_rng_all[3]),
-//		  .key(!KEY[0]),
-//		  .kill(kill3)
-//		);
+
+     main m1(
+        .clk(clk),
+        .resetn(resetn),
+        .go(go[1]),
+        .colour_in(SW[9:7]),
+        .x_in(8'd50),
+        .random_y(random_y),
+        .writeEnable(wrenAll[1]),
+        .x_out(x1),
+        .y_out(y1),
+        .colour_out(c1),
+        .need_rng(need_rng_all[1]),
+		  .key(KEY[2]),
+	     .kill(kill1),
+		  .score(score1)
+     );
+
+     main m2(
+        .clk(clk),
+        .resetn(resetn),
+        .go(go[2]),
+        .colour_in(SW[9:7]),
+        .x_in(8'd80),
+        .random_y(random_y),
+        .writeEnable(wrenAll[2]),
+        .x_out(x2),
+        .y_out(y2),
+        .colour_out(c2),
+        .need_rng(need_rng_all[2]),
+		  .key(KEY[1]),
+		  .kill(kill2),
+		  .score(score2)
+		);
+
+     main m3(
+        .clk(clk),
+        .resetn(resetn),
+        .go(go[3]),
+        .colour_in(SW[9:7]),
+        .x_in(8'd110),
+        .random_y(random_y),
+        .writeEnable(wrenAll[3]),
+        .x_out(x3),
+        .y_out(y3),
+        .colour_out(c3),
+        .need_rng(need_rng_all[3]),
+		  .key(KEY[0]),
+		  .kill(kill3),
+		  .score(score3)
+		);
+	  wire score_add0, score_add1, score_add2, score_add3;
+	  wire kill0, kill1, kill2, kill3;
+	  wire kill_sig0, kill_sig1, kill_sig2, kill_sig3;
 	  
-     
-	  reg [31:0] add_counter0;
+	  score_fsm sf0(
+	         .clk(clk),
+				.resetn(resetn),
+				.score_detect(score0),
+				.add(score_add0)
+	  );
+	  
+	   score_fsm sf1(
+	         .clk(clk),
+				.resetn(resetn),
+				.score_detect(score1),
+				.add(score_add1)
+	  );
+	  
+	  	  score_fsm sf2(
+	         .clk(clk),
+				.resetn(resetn),
+				.score_detect(score2),
+				.add(score_add2)
+	  );
+	  
+	   score_fsm sf3(
+	         .clk(clk),
+				.resetn(resetn),
+				.score_detect(score3),
+				.add(score_add3)
+	  );
+	  
+	  	  kill_fsm k0(
+	         .clk(clk),
+				.resetn(resetn),
+				.kill(kill0),
+				.kill_signal(kill_sig0)
+	  );
+	  
+	   kill_fsm k1(
+	         .clk(clk),
+				.resetn(resetn),
+				.kill(kill1),
+				.kill_signal(kill_sig1)
+	  );
+	  
+	  	  kill_fsm k2(
+	         .clk(clk),
+				.resetn(resetn),
+				.kill(kill2),
+				.kill_signal(kill_sig2)
+	  );
+	  
+	   kill_fsm k3(
+	         .clk(clk),
+				.resetn(resetn),
+				.kill(kill3),
+				.kill_signal(kill_sig3)
+	  );
+	  reg [31:0] counter = 0;
+	
 	  always @(posedge clk) begin
+			 if (start) begin
+			     start <= 0;
+				  resetn <= 1;
+			 end
 	      if(!resetn) begin
-			    total_score <= 0;
-				 add_counter0 <= 0;
+			    if (counter > 20000000) begin
+					 lives <= 10;
+					 total_score <= 0;
+					 resetn <= 1;
+					 counter <= 0;
+				 end else begin
+					counter <= counter + 1;
+				 end
 			end else begin
-				if (score0 == 1) begin
-					 if (add_counter0 == 0) begin
-						add_counter0 <= 1;
-						total_score <= total_score + 1;
-					 end
-				end else begin
-				    if (add_counter0 < 3000) begin
-					     add_counter0 <= add_counter0 + 1;
-					 end else begin
-					     add_counter0 <= 0;
-					 end
-				end
+			   total_score <= total_score + score_add0 + score_add1 + score_add2 + score_add3;
+				lives <= lives + score_add0 + score_add1 + score_add2 + score_add3 - kill_sig0 - kill_sig1 - kill_sig2 - kill_sig3;
 			end
-		end
 			
-			
+			if (lives == 0) begin 
+				high_score <= total_score;
+				resetn <= 0;
+			end
+	  end
+
+
      always @(*) begin
         if (wrenAll[0]) begin
             x = x0;
@@ -235,6 +330,123 @@ module final_project
         defparam VGA.BITS_PER_COLOUR_CHANNEL = 1;
         defparam VGA.BACKGROUND_IMAGE = "black.mif";
 
+endmodule
+
+
+module kill_fsm(
+        input clk,
+		  input kill,
+		  input resetn,
+		  output reg kill_signal
+);
+
+    reg [2:0] current_state, next_state;
+	 reg [31:0] counter;
+    localparam  WAIT = 3'd0,
+	             LOAD = 3'd1,
+					 HIGH = 3'd2,
+					 SLEEP = 3'd3;
+    
+	 always @(*)
+	 begin: state_table
+	     case (current_state)
+				WAIT: next_state = kill ? LOAD : WAIT;
+				LOAD: next_state = HIGH;
+				HIGH: next_state = kill ? HIGH: SLEEP;
+				SLEEP: next_state = (counter > 32'd1_0000_0000) ? WAIT: SLEEP;
+				default: next_state = WAIT;
+		  endcase
+	 end //state_table
+
+	 always @(*) begin: enable_sig
+	     kill_signal = 0;
+		  case (current_state)
+				LOAD: begin
+				    kill_signal = 1;
+				end
+				HIGH: begin 
+					kill_signal = 0;
+				end
+				WAIT: begin
+					kill_signal = 0;
+				end
+				SLEEP: begin
+				   kill_signal = 0;
+				end
+		  endcase
+	 end //enable_sig
+	 
+	 always @(posedge clk) begin
+	     if(!resetn) begin
+		      current_state <= WAIT;
+				counter <= 0;
+			end else begin
+		      current_state <= next_state;
+				if (current_state == SLEEP) begin
+					counter <= counter + 1;
+				end else begin
+				    counter <= 0;
+				end
+		  end
+	 end
+endmodule
+
+module score_fsm(
+        input clk,
+		  input score_detect,
+		  input resetn,
+		  output reg add
+);
+
+    reg [2:0] current_state, next_state;
+	 reg [31:0] counter;
+    localparam  WAIT = 3'd0,
+	             LOAD = 3'd1,
+					 HIGH = 3'd2,
+					 SLEEP = 3'd3;
+    
+	 always @(*)
+	 begin: state_table
+	     case (current_state)
+				WAIT: next_state = score_detect ? LOAD : WAIT;
+				LOAD: next_state = HIGH;
+				HIGH: next_state = score_detect ? HIGH: SLEEP;
+				SLEEP: next_state = (counter > 32'd1_0000_0000) ? WAIT: SLEEP;
+				default: next_state = WAIT;
+		  endcase
+	 end //state_table
+
+	 always @(*) begin: enable_sig
+	     add = 0;
+		  case (current_state)
+				LOAD: begin
+				    add = 1;
+				end
+				HIGH: begin 
+					add = 0;
+				end
+				WAIT: begin
+					add = 0;
+				end
+				SLEEP: begin
+				   add = 0;
+				end
+		  endcase
+	 end //enable_sig
+	 
+	 always @(posedge clk) begin
+	     if(!resetn) begin
+		      current_state <= WAIT;
+				counter <= 0;
+			end else begin
+		      current_state <= next_state;
+				if (current_state == SLEEP) begin
+					counter <= counter + 1;
+				end else begin
+				    counter <= 0;
+				end
+		  end
+	 end
 endmodule
 
 
@@ -326,21 +538,31 @@ module draw(
             x_counter <= 5'd0;
 				is_pressed <= 0;
 				score <= 0;
+				kill <= 0;
         end
         else if (go) begin
+
                 tmp_y <= y_in - 8'd135;
-					 if (tmp_y > 105 && tmp_y < 135 && !key) begin
-//					     is_pressed <= 1;
-                    score <= 1;
+					 
+					 if (y_in > 230 && y_in < 250 && !key) begin
+ 							is_pressed <= 1;
+                     score <= 1;
+					 end else begin
+					 	  score <= 0;
 					 end
-					 if (tmp_y > 135) begin
-						score <= 0;
+
+                if (y_in <= 230) begin
+					    is_pressed <= 0;
 					 end
+
+					 if (y_in >= 250) begin
+						kill <= !is_pressed;
+					 end else begin
+					   kill <= 0;
+					 end
+
                 if (y_in > 8'd135) begin
                     y_out <= tmp_y[6:0];
-						  if (!is_pressed) begin
-						       kill <= 1;
-						  end
 					 end else begin
                      y_out <= 0;
                 end
@@ -359,6 +581,7 @@ module draw(
             x_out <= x_in;
             tmp_y <= 7'd0;
             x_counter <= 5'd0;
+				kill <= 0;
         end
     end
 endmodule
